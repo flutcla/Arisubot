@@ -1,6 +1,5 @@
 import re
 import requests
-from time import sleep
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -41,7 +40,7 @@ def get_pro_id(message: str, server_id: str = "0") -> str:
     if len(msg) == 1:
         server_pro_dict = get_data_from_json(Path.cwd()/"imcgapi"/"server_pro_dict.json")
         if server_id in server_pro_dict.keys():
-            return server_pro_dict[server_id]
+            return server_pro_dict[server_id]["ID"]
         else:
             raise KeyError("The server({0}) haven't been registered.".format(server_id))
     elif len(msg) == 2:

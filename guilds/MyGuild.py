@@ -20,6 +20,12 @@ class MyGuild:
     async def on_member_join_(self, member: discord.Member):
         pass
 
+    async def on_raw_reaction_add_(self, client: discord.client, payload: discord.RawReactionActionEvent):
+        pass
+
+    async def on_raw_reaction_remove_(self, client: discord.client, payload: discord.RawReactionActionEvent):
+        pass
+
 
 def default(client):
     return MyGuild(0, client)

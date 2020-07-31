@@ -15,6 +15,7 @@ guild_dict = make_guild_dict(client)
 on_ready_.main(client)
 on_message_.main(client, guild_dict)
 on_member_join_.main(client, guild_dict)
+on_raw_reaction_add_.main(client, guild_dict)
 
 client.run(token)
 

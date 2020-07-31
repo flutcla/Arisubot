@@ -16,7 +16,13 @@ def get_runner(message: str, server_id: str, server_name: str) -> str:
         pro_id = get_pro_id(message, server_id)
     except KeyError:
         return "プロダクションIDとサーバーの紐付けがされていません。bot管理者に問い合わせてください。"
-    pro_name, member = get_pro_member(pro_id, server_name)
+    pro_name, member = get_pro_member(pro_id)
+
+    if not pro_name:
+        try:
+            pro_name = message.split()[1]
+        except IndexError:
+            pro_name = "プロダクション名不明"
 
     event_data = list(get_event().values())[0]
     event_detail = list(event_data["details"].values())[0]

@@ -17,7 +17,6 @@ def api(token: str):
     body = requests.get(request)
     body.raise_for_status()
     data = json.loads(body.text)
-    sleep(1)
     return data
 
 
@@ -37,7 +36,7 @@ def get_event():
 
 
 # メッセージとサーバIDからプロダクションIDを抽出する
-def get_pro_id(message: str, server_id: str = "0"):
+def get_pro_id(message: str, server_id: str = "0") -> str:
     msg = message.split()
     if len(msg) == 1:
         server_pro_dict = get_data_from_json(Path.cwd()/"imcgapi"/"server_pro_dict.json")
@@ -57,7 +56,8 @@ def get_pro_id(message: str, server_id: str = "0"):
 
 
 # プロダクションIDからプロメンと正式名称を抽出する
-def get_pro_member(pro_id: str, pro_name: str = "None") -> Tuple[str, List[str]]:
+def get_pro_member(pro_id: str) -> Tuple[str, List[str]]:
+    pro_name = None
     token = "producers?productionId={0}".format(pro_id)
     data = api(token)
     member = list()

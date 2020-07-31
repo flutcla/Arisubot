@@ -22,7 +22,7 @@ def get_runner(message: str, server_id: str, server_name: str) -> str:
         try:
             pro_name = message.split()[1]
         except IndexError:
-            pro_name = "プロダクション名不明"
+            pro_name = server_name
 
     event_data = list(get_event().values())[0]
     event_detail = list(event_data["details"].values())[0]

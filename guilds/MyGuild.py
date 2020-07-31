@@ -9,6 +9,7 @@ class MyGuild:
 
     async def on_message_(self, message: discord.Message):
         message_s = message.content.split()
+        print(message_s)
         if message_s[0] == "/arisu":
             await message.channel.send("私の使用方法については、こちら( https://hackmd.io/AZJWZiG-QxaQVn7x1eTxDA?view )をご覧ください。")
         elif message_s[0] == "/neko":

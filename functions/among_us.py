@@ -11,6 +11,8 @@ async def main(client: discord.client, message: discord.message):
         await register(client, message)
     elif key == "mute":
         await mute(client, message)
+    elif key == "unmute":
+        await mute(client, message, unmute=True)
 
 
 async def register(client: discord.client, message: discord.message):
@@ -26,10 +28,10 @@ async def register(client: discord.client, message: discord.message):
     await message.channel.send(
         "Among Us!関連機能のセットアップを開始します。\n"
         "まず初めに、専用のロールを作成してください。\n"
-        "作成できたら、30秒以内にロールのIDを教えて下さい。")
+        "作成できたら、1分以内にロールのIDを教えて下さい。")
     while True:
         try:
-            reply = await client.wait_for("message", timeout="30")
+            reply = await client.wait_for("message", timeout=60)
             role_id = int(reply.content)
             role = guild.get_role(role_id)
             if role is None:
@@ -46,10 +48,11 @@ async def register(client: discord.client, message: discord.message):
 
     await message.channel.send(
         "続いて、Among Us!の紹介と権限付与用のメッセージを送るテキストチャンネルのIDを教えてください。\n"
-        "また、部屋名の通知もそのチャンネルで行うことができます。")
+        "また、部屋名の通知もそのチャンネルで行うことができます。\n"
+        "こちらも1分以内でお願いします。")
     while True:
         try:
-            reply = await client.wait_for("message", timeout="30")
+            reply = await client.wait_for("message", timeout=60)
             announce_channel_id = int(reply.content)
             announce_channel = guild.get_channel(announce_channel_id)
             if announce_channel is None:
@@ -65,10 +68,11 @@ async def register(client: discord.client, message: discord.message):
     data["au"]["announce_channel_id"] = announce_channel_id
 
     await message.channel.send(
-        "最後に、一括ミュート等のコマンドを使うテキストチャンネルのIDを教えてください。")
+        "最後に、一括ミュート等のコマンドを使うテキストチャンネルのIDを教えてください。\n"
+        "わざわざ言わずともわかるかもしれませんが、1分以内にお願いします。")
     while True:
         try:
-            reply = await client.wait_for("message", timeout="30")
+            reply = await client.wait_for("message", timeout=60)
             command_channel_id = int(reply.content)
             command_channel = guild.get_channel(command_channel_id)
             if command_channel is None:
@@ -87,12 +91,12 @@ async def register(client: discord.client, message: discord.message):
     await message.channel.send("ありがとうございます、正常に登録されました。")
 
 
-async def mute(client: discord.client, message: discord.message):
+async def mute(client: discord.client, message: discord.message, unmute: bool = False):
     guild = message.guild
     data = get_guild_data(guild.id, guild.name)
     if message.channel.id != int(data["au"]["command_channel_id"]):
         return
-    role = client.get_role(int(data["au"]["role_id"]))
+    role = message.guild.get_role(int(data["au"]["role_id"]))
     if role is None:
         await message.channel.send()
     members = role.members
@@ -100,4 +104,7 @@ async def mute(client: discord.client, message: discord.message):
         if member.voice.channel is None:
             continue
         else:
-            member.voice.self_mute = True
+            if unmute:
+                await member.edit(mute=False)
+            else:
+                await member.edit(mute=True)

@@ -1,1 +1,1 @@
-from myutils.get_data_from_json import get_data_from_json
+from myutils.get_data_from_json import get_data_from_json, write_data_to_json

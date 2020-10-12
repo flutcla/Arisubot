@@ -1,5 +1,6 @@
 import discord
 from imcgapi.get_runner import get_runner
+from functions import among_us
 
 
 class MyGuild:
@@ -18,6 +19,10 @@ class MyGuild:
         elif message_s[0] == "/runner":
             reply = get_runner(message.content, str(message.guild.id), message.guild.name)
             await message.channel.send(reply)
+
+        # Among Us 関連機能
+        elif message_s[0] == "/au":
+            await among_us.main(self.client, message)
 
     async def on_member_join_(self, member: discord.Member):
         pass

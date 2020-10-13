@@ -61,11 +61,11 @@ class MyGuild:
                 announce_message_id = guild_data["au"]["announce_message_id"]
                 if payload.message_id == announce_message_id and payload.emoji.name == "👍":
                     await member.remove_roles(role)
+                    await member.edit(mute=False)
                 # ミュートボタン
                 mute_button_message_id = guild_data["au"]["mute_button_message_id"]
                 if payload.message_id == mute_button_message_id and payload.emoji.name == "🔇":
                     await among_us.mute(role, unmute=True)
-                    await member.edit(mute=False)
 
 
 def default(client):

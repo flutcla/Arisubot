@@ -26,16 +26,29 @@ class MyGuild:
         elif message_s[0] == "/au":
             await among_us.main(self.client, message)
 
+        data = get_data_from_json(Path.cwd()/"guilds"/"guild_db.json")
+        guild = message.guild
+        channel = message.channel
+        for guild_data in data.values():
+            # Among Us!用
+            if "au" in guild_data.keys() and "registered" in guild_data["au"].keys():
+                if channel.id == guild_data["au"]["announce_channel_id"]:
+                    last_message_id = channel.last_message.id
+                    async for msg in channel.history(limit=2):
+                        if msg.id == last_message_id:
+                            continue
+                        elif not msg.author.bot:
+                            await msg.delete()
+
     async def on_member_join_(self, member: discord.Member):
         pass
 
     async def on_raw_reaction_add_(self, client: discord.client, payload: discord.RawReactionActionEvent):
         data = get_data_from_json(Path.cwd()/"guilds"/"guild_db.json")
+        guild = client.get_guild(payload.guild_id)
         for guild_data in data.values():
-            guild = client.get_guild(payload.guild_id)
-
             # Among Us!用
-            if "au" in guild_data.keys():
+            if "au" in guild_data.keys() and "registered" in guild_data["au"].keys():
                 role_id = guild_data["au"]["role_id"]
                 role = guild.get_role(role_id)
                 # アナウンスメッセージ
@@ -49,10 +62,9 @@ class MyGuild:
 
     async def on_raw_reaction_remove_(self, client: discord.client, payload: discord.RawReactionActionEvent):
         data = get_data_from_json(Path.cwd() / "guilds" / "guild_db.json")
+        guild = client.get_guild(payload.guild_id)
+        member = guild.get_member(payload.user_id)
         for guild_data in data.values():
-            guild = client.get_guild(payload.guild_id)
-            member = guild.get_member(payload.user_id)
-
             # Among Us!用
             if "au" in guild_data.keys():
                 role_id = guild_data["au"]["role_id"]

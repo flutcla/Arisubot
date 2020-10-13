@@ -32,39 +32,31 @@ class MyGuild:
     async def on_raw_reaction_add_(self, client: discord.client, payload: discord.RawReactionActionEvent):
         data = get_data_from_json(Path.cwd()/"guilds"/"guild_db.json")
         for guild_data in data.values():
-            guild = client.get_guild(payload.guild_id)
 
             # Among Us!用
-            if "au" in guild_data.keys():
-                role_id = guild_data["au"]["role_id"]
+            if "au" not in guild_data.keys():
+                continue
+            announce_message_id = guild_data["au"]["announce_message_id"]
+            role_id = guild_data["au"]["role_id"]
+            if payload.message_id == announce_message_id and payload.emoji.name == "👍":
+                guild = client.get_guild(payload.guild_id)
                 role = guild.get_role(role_id)
-                # アナウンスメッセージ
-                announce_message_id = guild_data["au"]["announce_message_id"]
-                if payload.message_id == announce_message_id and payload.emoji.name == "👍":
-                    await payload.member.add_roles(role)
-                # ミュートボタン
-                mute_button_message_id = guild_data["au"]["mute_button_message_id"]
-                if payload.message_id == mute_button_message_id and payload.emoji.name == ":mute:":
-                    await among_us.mute(role)
+                await payload.member.add_roles(role)
 
     async def on_raw_reaction_remove_(self, client: discord.client, payload: discord.RawReactionActionEvent):
         data = get_data_from_json(Path.cwd() / "guilds" / "guild_db.json")
         for guild_data in data.values():
-            guild = client.get_guild(payload.guild_id)
-            member = guild.get_member(payload.user_id)
 
             # Among Us!用
-            if "au" in guild_data.keys():
-                role_id = guild_data["au"]["role_id"]
+            if "au" not in guild_data.keys():
+                continue
+            announce_message_id = guild_data["au"]["announce_message_id"]
+            role_id = guild_data["au"]["role_id"]
+            if payload.message_id == announce_message_id and payload.emoji.name == "👍":
+                guild = client.get_guild(payload.guild_id)
+                member = guild.get_member(payload.user_id)
                 role = guild.get_role(role_id)
-                # アナウンスメッセージ
-                announce_message_id = guild_data["au"]["announce_message_id"]
-                if payload.message_id == announce_message_id and payload.emoji.name == "👍":
-                    await member.remove_roles(role)
-                # ミュートボタン
-                mute_button_message_id = guild_data["au"]["mute_button_message_id"]
-                if payload.message_id == mute_button_message_id and payload.emoji.name == ":mute:":
-                    await among_us.mute(role, unmute=True)
+                await member.remove_roles(role)
 
 
 def default(client):

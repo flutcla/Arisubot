@@ -44,7 +44,7 @@ class MyGuild:
                     await payload.member.add_roles(role)
                 # ミュートボタン
                 mute_button_message_id = guild_data["au"]["mute_button_message_id"]
-                if payload.message_id == mute_button_message_id and payload.emoji.name == ":mute:":
+                if payload.message_id == mute_button_message_id and payload.emoji.name == "🔇":
                     await among_us.mute(role)
 
     async def on_raw_reaction_remove_(self, client: discord.client, payload: discord.RawReactionActionEvent):
@@ -63,7 +63,7 @@ class MyGuild:
                     await member.remove_roles(role)
                 # ミュートボタン
                 mute_button_message_id = guild_data["au"]["mute_button_message_id"]
-                if payload.message_id == mute_button_message_id and payload.emoji.name == ":mute:":
+                if payload.message_id == mute_button_message_id and payload.emoji.name == "🔇":
                     await among_us.mute(role, unmute=True)
 
 

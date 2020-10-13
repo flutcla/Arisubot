@@ -130,9 +130,9 @@ async def generate_mute_button(client: discord.client, message: discord.message)
     mute_button_message = await announce_channel.send(
         "--------------------------------------------------\n"
         "これは、Among Us!参加者一括ミュート機能用のメッセージです。\n"
-        "このメッセージに':mute:'でリアクションすると、専用ロール所持者が一括ミュートされます。\n"
+        "このメッセージに'🔇'でリアクションすると、専用ロール所持者が一括ミュートされます。\n"
         "また、リアクションを外すとミュートが外れます。")
-    await mute_button_message.add_reaction(":mute:")
+    await mute_button_message.add_reaction("🔇")
     mute_button_message_id = mute_button_message.id
     data["au"]["mute_button_message_id"] = mute_button_message_id
     write_guild_data(data)

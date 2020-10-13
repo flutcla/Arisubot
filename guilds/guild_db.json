@@ -5,7 +5,9 @@
         "au": {
             "role_id": 765248051589545994,
             "announce_channel_id": 765247905363656744,
-            "command_channel_id": 765247926598762506
+            "command_channel_id": 765247926598762506,
+            "registered": true,
+            "announce_message_id": 765504102662668338
         }
     },
     "499428622331805697": {

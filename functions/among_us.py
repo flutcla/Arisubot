@@ -13,14 +13,20 @@ async def main(client: discord.client, message: discord.message):
         data["au"] = dict()
     if key == "register":  # サーバーを登録
         await register(client, message)
-    elif "registered" not in data["au"].keys() or data["au"]["registered"]:
+    elif "registered" not in data["au"].keys() or not data["au"]["registered"]:
         await message.channel.send("Among Us!関連機能を利用するためには、まず最初に'/au register'コマンドで登録してください。")
-    elif key == "announce":
+
+    if message.channel.id != int(data["au"]["command_channel_id"]):
+        return
+
+    if key == "announce":
         await announce(client, message)
+    elif key == "button":
+        await generate_mute_button(client, message)
     elif key == "mute":
-        await mute(client, message)
+        await command_mute(message)
     elif key == "unmute":
-        await mute(client, message, unmute=True)
+        await command_mute(message, unmute=True)
 
 
 async def register(client: discord.client, message: discord.message):
@@ -106,6 +112,7 @@ async def announce(client: discord.client, message: discord.message):
     data = get_guild_data(guild.id, guild.name)
     announce_channel = guild.get_channel(data["au"]["announce_channel_id"])
     announce_message = await announce_channel.send(
+        "--------------------------------------------------\n"
         "これは、Among Us!専用ロール付与用のメッセージです。\n"
         "このメッセージに'👍'でリアクションすると、参加者専用ロールが付与されます。\n"
         "このロールが付与されている場合、一斉ミュート等の対象になります。\n"
@@ -116,14 +123,30 @@ async def announce(client: discord.client, message: discord.message):
     write_guild_data(data)
 
 
-async def mute(client: discord.client, message: discord.message, unmute: bool = False):
+async def generate_mute_button(client: discord.client, message: discord.message):
     guild = message.guild
     data = get_guild_data(guild.id, guild.name)
-    if message.channel.id != int(data["au"]["command_channel_id"]):
-        return
+    announce_channel = guild.get_channel(data["au"]["announce_channel_id"])
+    mute_button_message = await announce_channel.send(
+        "--------------------------------------------------\n"
+        "これは、Among Us!参加者一括ミュート機能用のメッセージです。\n"
+        "このメッセージに':mute:'でリアクションすると、専用ロール所持者が一括ミュートされます。\n"
+        "また、リアクションを外すとミュートが外れます。")
+    await mute_button_message.add_reaction(":mute:")
+    mute_button_message_id = mute_button_message.id
+    data["au"]["mute_button_message_id"] = mute_button_message_id
+    write_guild_data(data)
+
+
+async def command_mute(message: discord.message, unmute: bool = False):
+    data = get_guild_data(message.guild.id, message.guild.name)
     role = message.guild.get_role(int(data["au"]["role_id"]))
     if role is None:
         await message.channel.send()
+    await mute(role, unmute)
+
+
+async def mute(role: discord.role, unmute: bool = False):
     members = role.members
     for member in members:
         if member.voice is None or member.voice.channel is None:

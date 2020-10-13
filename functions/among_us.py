@@ -101,7 +101,8 @@ async def mute(client: discord.client, message: discord.message, unmute: bool = 
         await message.channel.send()
     members = role.members
     for member in members:
-        if member.voice.channel is None:
+        print(member)
+        if member.voice is None or member.voice.channel is None:
             continue
         else:
             if unmute:

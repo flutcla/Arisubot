@@ -7,8 +7,16 @@ from guilds.db_funcs import get_guild_data, write_guild_data
 async def main(client: discord.client, message: discord.message):
     message_s = message.content.split()
     key = message_s[1]
+    guild = message.guild
+    data = get_guild_data(guild.id, guild.name)
+    if "au" not in data.keys():
+        data["au"] = dict()
     if key == "register":  # サーバーを登録
         await register(client, message)
+    elif not data["au"]["registered"]:
+        await message.channel.send("Among Us!関連機能を利用するためには、まず最初に'/au register'コマンドで登録してください。")
+    elif key == "announce":
+        await announce(client, message)
     elif key == "mute":
         await mute(client, message)
     elif key == "unmute":
@@ -87,8 +95,25 @@ async def register(client: discord.client, message: discord.message):
             continue
     data["au"]["command_channel_id"] = command_channel_id
 
+    data["au"]["registered"] = True
     write_guild_data(data)
     await message.channel.send("ありがとうございます、正常に登録されました。")
+    await announce(client, message)
+
+
+async def announce(client: discord.client, message: discord.message):
+    guild = message.guild
+    data = get_guild_data(guild.id, guild.name)
+    announce_channel = guild.get_channel(data["au"]["announce_channel_id"])
+    announce_message = await announce_channel.send(
+        "これは、Among Us!専用ロール付与用のメッセージです。\n"
+        "このメッセージに'👍'でリアクションすると、参加者専用ロールが付与されます。\n"
+        "このロールが付与されている場合、一斉ミュート等の対象になります。\n"
+        "また、リアクションを外すとロールが外されます。")
+    await announce_message.add_reaction("👍")
+    announce_message_id = announce_message.id
+    data["au"]["announce_message_id"] = announce_message_id
+    write_guild_data(data)
 
 
 async def mute(client: discord.client, message: discord.message, unmute: bool = False):
@@ -101,7 +126,6 @@ async def mute(client: discord.client, message: discord.message, unmute: bool = 
         await message.channel.send()
     members = role.members
     for member in members:
-        print(member)
         if member.voice is None or member.voice.channel is None:
             continue
         else:

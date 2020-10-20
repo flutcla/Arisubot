@@ -162,7 +162,7 @@ async def mute(role: discord.role, unmute: bool = False):
 
 
 async def send_map(message: discord.message):
-    m = message.split()
+    m = message.content.split()
     file_path = [Path.cwd()/"functions"/"data"/"Skeld_guid.jpg",
                  Path.cwd()/"functions"/"data"/"Mira_guid.jpg",
                  Path.cwd()/"functions"/"data"/"Polus_guid.jpg"]

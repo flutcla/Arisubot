@@ -172,4 +172,4 @@ async def send_map(message: discord.message):
         await message.channel.send(file=discord.File(file_path[1]))
         await message.channel.send(file=discord.File(file_path[2]))
     elif m[2] in ["0", "1", "2"]:
-        await message.channel.send(file=discord.File(file_path[int(m[2])]))
+        await message.channel.send(file=discord.File(file_path[int(m[2]) - 1]))

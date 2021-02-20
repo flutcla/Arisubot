@@ -46,6 +46,8 @@ class Tanmatsu(MyGuild):
 
     async def on_raw_reaction_add_(self, client: discord.client, payload: discord.RawReactionActionEvent):
         await super().on_raw_reaction_add_(client, payload)
+
+        # GLC用
         channel = client.get_channel(payload.channel_id)
         if channel.id == self.ID_GLC_RULE_CHANNEL:
             guild = client.get_guild(payload.guild_id)
@@ -57,6 +59,21 @@ class Tanmatsu(MyGuild):
             role = channel.guild.get_role(self.ID_GLC_ROLE)
             await member.add_roles(role)
 
+        # 絵チャ用
+        if payload.message_id == 812770407240826922 and payload.emoji.name == "👍":
+            guild = client.get_guild(payload.guild_id)
+            role = guild.get_role(812769081605357668)
+            await payload.member.add_roles(role)
+
+    async def on_raw_reaction_remove_(self, client: discord.client, payload: discord.RawReactionActionEvent):
+        await super().on_raw_reaction_remove_(client, payload)
+
+        # 絵チャ用
+        if payload.message_id == 812770407240826922 and payload.emoji.name == "👍":
+            guild = client.get_guild(payload.guild_id)
+            member = guild.get_member(payload.user_id)
+            role = guild.get_role(812769081605357668)
+            await member.remove_roles(role)
 
 def tanmatsu(client):
     return Tanmatsu(ID_TANMATSU, client)

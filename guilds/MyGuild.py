@@ -9,7 +9,6 @@ class MyGuild:
     def __init__(self, id_: int, client: discord.Client) -> None:
         self.id_ = id_
         self.client = client
-        print(id_)
 
     async def on_message_(self, message: discord.Message):
         message_s = message.content.split()

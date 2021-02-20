@@ -21,24 +21,6 @@ class Test(MyGuild):
             role = guild.get_role(738788021628960812)
             await member.remove_roles(role)
 
-    # 橘ありすの端末での定数（ID）
-    ID_USER_ROLE = 812752880087990333
-    # ID_REVOCATION_ROLE = 742256629470330992
-    # ID_GLC_ROLE = 736905506815344691
-    ID_ENTRANCE_CHANNEL = 527464796799631383
-    ID_RULE_CHANNEL = 527464796799631383
-    ID_INTRO_CHANNEL = 527464796799631383
-    # ID_GLC_RULE_CHANNEL = 736919335964114964
-
-    async def on_member_join_(self, member: discord.Member):
-        await super().on_member_join_(member)
-        channel = self.client.get_channel(self.ID_ENTRANCE_CHANNEL)
-        await channel.send(member.mention
-                           + "橘ありすDiscordサーバー[橘ありすの端末]へようこそお越しくださいました。\n"
-                           + "当サーバーのご利用にあたって、まずは <#{}> チャンネルの規約をご覧ください。\n".format(self.ID_RULE_CHANNEL)
-                           + "その後、<#{}> チャンネルに自己紹介の記入をよろしくお願いいたします。\n".format(self.ID_INTRO_CHANNEL)
-                           + "（スパム等の荒らし対策のため、自己紹介で確認が取れた方のみURLを含む発言などが可能となります。）")
-
 
 def test(client):
     return Test(ID_TEST, client)

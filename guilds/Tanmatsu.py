@@ -4,11 +4,11 @@ ID: 373751424171114498
 """
 
 import discord
-from guilds import MyGuild
+from guilds.MyGuild import MyGuild
 
 ID_TANMATSU = 373751424171114498
 
-"""
+
 class Tanmatsu(MyGuild):
     # 橘ありすの端末での定数（ID）
     ID_USER_ROLE = 513596307236192277
@@ -56,7 +56,7 @@ class Tanmatsu(MyGuild):
                     return
             role = channel.guild.get_role(self.ID_GLC_ROLE)
             await member.add_roles(role)
-    """
+
 
 def tanmatsu(client):
     return Tanmatsu(ID_TANMATSU, client)

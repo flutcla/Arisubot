@@ -8,7 +8,9 @@ from guilds import make_guild_dict
 
 
 token: str = myutils.get_data_from_json(Path.cwd()/"token.json")["token"]["test"]
-client = discord.Client()
+intents = discord.Intents.all()
+intents.members = True
+client = discord.Client(intents=intents)
 
 guild_dict = make_guild_dict(client)
 

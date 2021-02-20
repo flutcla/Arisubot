@@ -23,7 +23,7 @@ class Tanmatsu(MyGuild):
         await super().on_member_join_(member)
         channel = self.client.get_channel(self.ID_ENTRANCE_CHANNEL)
         await channel.send(member.mention
-                           + "橘ありすDiscordサーバー[橘ありすの端末へようこそお越しくださいました。\n"
+                           + "橘ありすDiscordサーバー[橘ありすの端末]へようこそお越しくださいました。\n"
                            + "当サーバーのご利用にあたって、まずは <#{}> チャンネルの規約をご覧ください。\n".format(self.ID_RULE_CHANNEL)
                            + "その後、<#{}> チャンネルに自己紹介の記入をよろしくお願いいたします。\n".format(self.ID_INTRO_CHANNEL)
                            + "（スパム等の荒らし対策のため、自己紹介で確認が取れた方のみURLを含む発言などが可能となります。）")

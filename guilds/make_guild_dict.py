@@ -13,7 +13,7 @@ def make_guild_dict(client):
     guild_list.append(test(client))
     guild_list.append(techmas(client))
     guild_list.append(lookforward(client))
-    guild_list.append(tanmatsu(client))
+#    guild_list.append(tanmatsu(client))
 
     for guild in guild_list:
         guild_dict[guild.id_] = guild

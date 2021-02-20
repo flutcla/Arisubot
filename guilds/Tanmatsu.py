@@ -8,7 +8,7 @@ from guilds import MyGuild
 
 ID_TANMATSU = 373751424171114498
 
-
+"""
 class Tanmatsu(MyGuild):
     # 橘ありすの端末での定数（ID）
     ID_USER_ROLE = 513596307236192277
@@ -20,6 +20,7 @@ class Tanmatsu(MyGuild):
     ID_GLC_RULE_CHANNEL = 736919335964114964
 
     async def on_member_join_(self, client: discord.Client, member: discord.Member):
+        await super().on_member_join_(member)
         channel = client.get_channel(self.ID_ENTRANCE_CHANNEL)
         await channel.send(member.mention
                            + "橘ありすDiscordサーバー[橘ありすの端末へようこそお越しくださいました。\n"
@@ -28,6 +29,7 @@ class Tanmatsu(MyGuild):
                            + "（スパム等の荒らし対策のため、自己紹介で確認が取れた方のみURLを含む発言などが可能となります。）")
 
     async def on_message_(self, client: discord.Client, message: discord.Message):
+        await super().on_message_(message)
         channel = client.get_channel(self.ID_INTRO_CHANNEL)
         if message.author.bot:
             return
@@ -43,6 +45,7 @@ class Tanmatsu(MyGuild):
                 await message.author.add_roles(role)
 
     async def on_raw_reaction_add_(self, client: discord.client, payload: discord.RawReactionActionEvent):
+        await super().on_raw_reaction_add_(client, payload)
         channel = client.get_channel(payload.channel_id)
         if channel.id == self.ID_GLC_RULE_CHANNEL:
             guild = client.get_guild(payload.guild_id)
@@ -53,7 +56,8 @@ class Tanmatsu(MyGuild):
                     return
             role = channel.guild.get_role(self.ID_GLC_ROLE)
             await member.add_roles(role)
-
+    """
 
 def tanmatsu(client):
     return Tanmatsu(ID_TANMATSU, client)
+

@@ -23,8 +23,8 @@ class Tanmatsu(MyGuild):
         channel = client.get_channel(self.ID_ENTRANCE_CHANNEL)
         await channel.send(member.mention
                            + "橘ありすDiscordサーバー[橘ありすの端末へようこそお越しくださいました。\n"
-                           + "当サーバーのご利用にあたって、まずは <#{}> チャンネルの規約をご覧ください。\n".format(ID_RULE_CHANNEL)
-                           + "その後、<#{}> チャンネルに自己紹介の記入をよろしくお願いいたします。\n".format(ID_INTRO_CHANNEL)
+                           + "当サーバーのご利用にあたって、まずは <#{}> チャンネルの規約をご覧ください。\n".format(self.ID_RULE_CHANNEL)
+                           + "その後、<#{}> チャンネルに自己紹介の記入をよろしくお願いいたします。\n".format(self.ID_INTRO_CHANNEL)
                            + "（スパム等の荒らし対策のため、自己紹介で確認が取れた方のみURLを含む発言などが可能となります。）")
 
     async def on_message_(self, client: discord.Client, message: discord.Message):
@@ -36,9 +36,9 @@ class Tanmatsu(MyGuild):
             if "名前" in message.content and "担当" in message.content:
                 channel = client.get_channel(self.ID_ENTRANCE_CHANNEL)
                 await channel.send(message.author.mention
-                                           + "さんのユーザー申請を承認、あなたに一般ユーザーの権限を付与しました。\n"
-                                           + "あらためまして、ようこそ[橘ありすの端末]へ。\n"
-                                           + "あなたの来訪を、心より歓迎します。")
+                                   + "さんのユーザー申請を承認、あなたに一般ユーザーの権限を付与しました。\n"
+                                   + "あらためまして、ようこそ[橘ありすの端末]へ。\n"
+                                   + "あなたの来訪を、心より歓迎します。")
                 role = channel.guild.get_role(self.ID_USER_ROLE)
                 await message.author.add_roles(role)
 

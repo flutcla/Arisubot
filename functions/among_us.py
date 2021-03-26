@@ -44,6 +44,8 @@ async def register(client: discord.client, message: discord.message):
 
     await message.channel.send(
         "Among Us!関連機能のセットアップを開始します。\n"
+        "セットアップには、ミュート用の専用ロールのID・ロール付与用メッセージを送信するチャンネルのID・コマンド等送信用チャットのID"
+        "が必要になります。\n"
         "まず初めに、専用のロールを作成してください。\n"
         "作成できたら、1分以内にロールのIDを教えて下さい。")
     while True:
@@ -79,14 +81,14 @@ async def register(client: discord.client, message: discord.message):
         except TimeoutError:
             await message.channel.send("お忙しいようですので、中断しました。")
             return
-        except TypeError:
+        except TypeError or ValueError:
             await message.channel.send("チャンネルIDは数値で入力してください。")
             continue
     data["au"]["announce_channel_id"] = announce_channel_id
 
     await message.channel.send(
         "最後に、一括ミュート等のコマンドを使うテキストチャンネルのIDを教えてください。\n"
-        "わざわざ言わずともわかるかもしれませんが、1分以内にお願いします。")
+        "1分以内にお願いします。")
     while True:
         try:
             reply = await client.wait_for("message", timeout=60)
@@ -119,7 +121,8 @@ async def announce(client: discord.client, message: discord.message):
         "これは、Among Us!専用ロール付与用のメッセージです。\n"
         "このメッセージに'👍'でリアクションすると、参加者専用ロールが付与されます。\n"
         "このロールが付与されている場合、一斉ミュート等の対象になります。\n"
-        "また、リアクションを外すとロールが外されます。")
+        "また、リアクションを外すとロールが外されます。\n"
+        "BOTの不具合でサーバーミュートが付与されたままになってしまった場合は、リアクションを外すことで解消できます。")
     await announce_message.add_reaction("👍")
     announce_message_id = announce_message.id
     data["au"]["announce_message_id"] = announce_message_id

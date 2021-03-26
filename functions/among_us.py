@@ -13,13 +13,9 @@ async def main(client: discord.client, message: discord.message):
         data["au"] = dict()
     if key == "register":  # サーバーを登録
         await register(client, message)
-    elif "registered" not in data["au"].keys() or not data["au"]["registered"]:
+    elif "registered" not in data["au"].keys() or data["au"]["registered"]:
         await message.channel.send("Among Us!関連機能を利用するためには、まず最初に'/au register'コマンドで登録してください。")
-
-    if message.channel.id != int(data["au"]["command_channel_id"]):
-        return
-
-    if key == "announce":
+    elif key == "announce":
         await announce(client, message)
     elif key == "button":
         await generate_mute_button(client, message)
@@ -35,7 +31,6 @@ async def main(client: discord.client, message: discord.message):
 async def register(client: discord.client, message: discord.message):
     role_id: int = 0
     announce_channel_id: int = 0
-    command_channel_id: int = 0
 
     guild = message.guild
     data = get_guild_data(guild.id, guild.name)

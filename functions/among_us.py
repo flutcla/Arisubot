@@ -13,7 +13,7 @@ async def main(client: discord.client, message: discord.message):
         data["au"] = dict()
     if key == "register":  # サーバーを登録
         await register(client, message)
-    elif "registered" not in data["au"].keys() or data["au"]["registered"]:
+    elif "registered" not in data["au"].keys() or not data["au"]["registered"]:
         await message.channel.send("Among Us!関連機能を利用するためには、まず最初に'/au register'コマンドで登録してください。")
     elif key == "announce":
         await announce(client, message)

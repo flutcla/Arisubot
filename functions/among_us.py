@@ -50,7 +50,7 @@ async def register(client: discord.client, message: discord.message):
     while True:
         try:
             reply = await client.wait_for("message", timeout=60)
-            if reply.channel != message.guild:
+            if reply.channel != message.channel:
                 continue
             role_id = int(reply.content)
             role = guild.get_role(role_id)
@@ -73,7 +73,7 @@ async def register(client: discord.client, message: discord.message):
     while True:
         try:
             reply = await client.wait_for("message", timeout=60)
-            if reply.channel != message.guild:
+            if reply.channel != message.channel:
                 continue
             announce_channel_id = int(reply.content)
             announce_channel = guild.get_channel(announce_channel_id)

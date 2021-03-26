@@ -44,13 +44,14 @@ async def register(client: discord.client, message: discord.message):
 
     await message.channel.send(
         "Among Us!関連機能のセットアップを開始します。\n"
-        "セットアップには、ミュート用の専用ロールのID・ロール付与用メッセージを送信するチャンネルのID・コマンド等送信用チャットのID"
-        "が必要になります。\n"
+        "セットアップには、ミュート用の専用ロールのID・ロール付与用メッセージを送信するチャンネルのIDが必要になります。\n"
         "まず初めに、専用のロールを作成してください。\n"
         "作成できたら、1分以内にロールのIDを教えて下さい。")
     while True:
         try:
             reply = await client.wait_for("message", timeout=60)
+            if reply.channel != message.guild:
+                continue
             role_id = int(reply.content)
             role = guild.get_role(role_id)
             if role is None:
@@ -72,6 +73,8 @@ async def register(client: discord.client, message: discord.message):
     while True:
         try:
             reply = await client.wait_for("message", timeout=60)
+            if reply.channel != message.guild:
+                continue
             announce_channel_id = int(reply.content)
             announce_channel = guild.get_channel(announce_channel_id)
             if announce_channel is None:
@@ -85,26 +88,6 @@ async def register(client: discord.client, message: discord.message):
             await message.channel.send("チャンネルIDは数値で入力してください。")
             continue
     data["au"]["announce_channel_id"] = announce_channel_id
-
-    await message.channel.send(
-        "最後に、一括ミュート等のコマンドを使うテキストチャンネルのIDを教えてください。\n"
-        "1分以内にお願いします。")
-    while True:
-        try:
-            reply = await client.wait_for("message", timeout=60)
-            command_channel_id = int(reply.content)
-            command_channel = guild.get_channel(command_channel_id)
-            if command_channel is None:
-                await message.channel.send("チャンネルIDが間違っているかもしれません、確認してもう一度入力してください。")
-                continue
-            break
-        except TimeoutError:
-            await message.channel.send("お忙しいようですので、中断しました。")
-            return
-        except TypeError:
-            await message.channel.send("チャンネルIDは数値で入力してください。")
-            continue
-    data["au"]["command_channel_id"] = command_channel_id
 
     data["au"]["registered"] = True
     write_guild_data(data)
@@ -159,9 +142,9 @@ async def mute(role: discord.role, unmute: bool = False):
             continue
         else:
             if unmute:
-                await member.edit(mute=False)
+                await member.edit(mute=False, deafen=False)
             else:
-                await member.edit(mute=True)
+                await member.edit(mute=True, deafen=True)
 
 
 async def send_map(message: discord.message):

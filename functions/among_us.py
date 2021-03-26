@@ -93,6 +93,7 @@ async def register(client: discord.client, message: discord.message):
     write_guild_data(data)
     await message.channel.send("ありがとうございます、正常に登録されました。")
     await announce(client, message)
+    await generate_mute_button(client, message)
 
 
 async def announce(client: discord.client, message: discord.message):

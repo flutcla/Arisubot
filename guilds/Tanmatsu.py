@@ -35,7 +35,7 @@ class Tanmatsu(MyGuild):
             return
 
         if message.channel.id == self.ID_INTRO_CHANNEL:
-            if "名前" in message.content and "担当" in message.content:
+            if "名前" in message.content and ("担当" in message.content or "推し" in message.content):
                 channel = self.client.get_channel(self.ID_ENTRANCE_CHANNEL)
                 await channel.send(message.author.mention
                                    + "さんのユーザー申請を承認、あなたに一般ユーザーの権限を付与しました。\n"

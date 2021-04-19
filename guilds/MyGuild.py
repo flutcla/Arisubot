@@ -1,7 +1,7 @@
 from pathlib import Path
 import discord
 from imcgapi.get_runner import get_runner
-from functions import among_us
+from functions import among_us, reminder
 from myutils.get_data_from_json import get_data_from_json
 
 
@@ -21,6 +21,10 @@ class MyGuild:
         elif message_s[0] == "/runner":
             reply = get_runner(message.content, str(message.guild.id), message.guild.name)
             await message.channel.send(reply)
+
+        # リマインダー
+        elif message_s[0] == "/reminder":
+            await reminder.main(message)
 
         # Among Us 関連機能
         elif message_s[0] == "/au":
